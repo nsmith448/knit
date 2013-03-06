@@ -14,7 +14,9 @@ case class Sprint(
   description: String,
   begin_date: Date,
   end_date: Date,
-  status: Int) extends Resource {
+  status: Int,
+  order: Int,
+  priority: Int) extends Resource with Ordered with Prioritized {
 
   lazy val stories = StoryRepo.findBySprint(this)
 }
@@ -32,7 +34,9 @@ trait SprintComponent extends ResourceComponent {
     def begin_date = column[Date]("begin_date")
     def end_date = column[Date]("end_date")
     def status = column[Int]("status")
-    def * = id.? ~ created_time ~ updated_time ~ project_id ~ title ~ description ~ begin_date ~ end_date ~ status <> (Sprint, Sprint.unapply _)
+    def order = column[Int]("order")
+    def priority = column[Int]("priority")
+    def * = id.? ~ created_time ~ updated_time ~ project_id ~ title ~ description ~ begin_date ~ end_date ~ status ~ order ~ priority <> (Sprint, Sprint.unapply _)
 
     def findByProject(proj: Project)(implicit session: Session) = {
       (for {

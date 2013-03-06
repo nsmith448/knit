@@ -29,12 +29,16 @@ trait ResourceComponent {
     def updated_time = column[Timestamp]("updated_time")
 
     def all()(implicit session: Session): List[T] = {
-      Query(this) list
+      Query(this).list
     }
 
     protected def byId(id: Long) = for {
       q <- Query(this) if q.id === id
     } yield q
+
+    // TODO
+    // this will be moved to Ordered
+    def inOrder(q: Query[this.type, T]) = q.sortBy(_.id.asc)
 
     def findById(id: Long)(implicit session: Session): Option[T] = {
       byId(id).firstOption
@@ -48,4 +52,5 @@ trait ResourceComponent {
       for (row <- rows) this.insert(row)
     }
   }
+
 }

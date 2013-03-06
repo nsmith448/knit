@@ -20,16 +20,3 @@ object Global extends GlobalSettings with SlickDriven {
     }
   }
 }
-/*
-    database withSession {
-      val ddl = Users.ddl ++ Sprints.ddl ++ Stories.ddl ++ Tasks.ddl
-      info ("Creating Database Schema:" + ddl.createStatements.foldLeft("")(_+"\n"+_))
-      ddl.create
-      
-      info ("Running DataFixtures...")
-      UsersFixture.createFixtures
-      ProjectsFixture.createFixtures
-      SprintsFixture.createFixtures
-      StoriesFixture.createFixtures
-      // TasksFixture.createFixtures
-    }*/ 

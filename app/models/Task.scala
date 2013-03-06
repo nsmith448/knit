@@ -11,9 +11,11 @@ case class Task(
   title: String,
   description: String,
   status: Int,
+  order: Int,
+  priority: Int,
   assignee_id: Long,
   time_total: Float,
-  time_spent: Float) extends Resource with Trackable {
+  time_spent: Float) extends Resource with Trackable with Ordered with Prioritized {
 
   override def tracked(total: Float, spent: Float) = {
     this.copy(time_total = total, time_spent = spent)
@@ -31,10 +33,12 @@ trait TaskComponent extends ResourceComponent {
     def title = column[String]("title")
     def description = column[String]("description", O.DBType("VARCHAR(4096)"))
     def status = column[Int]("status")
+    def order = column[Int]("order")
+    def priority = column[Int]("priority")
     def assignee_id = column[Long]("assignee_id")
     def time_total = column[Float]("time_total")
     def time_spent = column[Float]("time_spent")
-    def * = id.? ~ created_time ~ updated_time ~ story_id ~ title ~ description ~ status ~ assignee_id ~ time_total ~ time_spent <> (Task, Task.unapply _)
+    def * = id.? ~ created_time ~ updated_time ~ story_id ~ title ~ description ~ status ~ order ~ priority ~ assignee_id ~ time_total ~ time_spent <> (Task, Task.unapply _)
 
     def findByStory(story: Story)(implicit session: Session) = {
       (for {
@@ -42,4 +46,12 @@ trait TaskComponent extends ResourceComponent {
       } yield tk) list
     }
   }
+}
+
+object TaskStatus extends Enumeration {
+  val NEW = Value(1)
+  val IN_PROGRESS = Value(2)
+  val RESOLVED = Value(3)
+  val NEEDS_REVIEW = Value(4)
+  val BLOCKED = Value(5)
 }
