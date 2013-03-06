@@ -1,0 +1,30 @@
+@(story: Story)
+
+@main("Story") {
+    
+    <h1> @story.title </h1>
+    
+	<dl>
+		<dt>Description</dt><dd>@Html(story.description)</dd>
+		<dt>Created On</td><dd>@story.created_time</dd>
+	</dl>
+	
+	<div class="row-fluid">
+		<div class="row-fluid" style="padding-bottom: 0px">
+			<h3 class="span8" style="margin-top: 0px; margin-bottom: 0px">@story.title</h3>
+			<div class="span4">
+				<div class="btn-group pull-right">
+					<a class="btn btn-small">Info</a>
+					<a class="btn btn-small">New Task</a>
+				</div>
+			</div>
+		</div>
+		@for(task <- story.tasks) {
+			<div class="span3">
+			<h5>@task.title</h5>
+			@Html(task.description)
+			</div>
+		}
+		</table>
+	</div>
+}

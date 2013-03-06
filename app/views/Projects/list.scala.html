@@ -1,0 +1,20 @@
+@(rows: List[Project])
+
+@main("Projects") {
+    
+    <h3> Projects </h3>
+    <table class="table">
+    	<tr><th>ID</th><th>Title</th><th>Description</th><th>Status</th><th>Created</th><th>Updated</th></tr>
+    	@for(row <- rows) {
+    	<tr>
+    	<td>@row.id.getOrElse("N/A")</td>
+    	<td>@row.title</td>
+    	<td>@row.description</td>
+    	<td>@row.status</td>
+    	<td>@row.created_time</td>
+    	<td>@row.updated_time</td>
+    	</tr>
+   		}
+    </table>
+    
+}
