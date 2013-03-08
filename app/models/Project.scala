@@ -21,14 +21,16 @@ case class Project(
   lazy val sprints = SprintRepo.findByProject(this)
 }
 
-trait ProjectComponent extends ResourceComponent {
+trait ProjectComponent extends ResourceComponent with OrderedComponent {
   self: Profile =>
-
-  object Projects extends Resources[Project]("projects") {
+    
+  import profile.simple._
+  
+  object Projects extends Resources[Project]("projects") with OrderedRows[Project] {
+    type T = Project
     def title = column[String]("title")
     def description = column[String]("description", O.DBType("VARCHAR(4096)"))
     def status = column[Int]("status")
-    def order = column[Int]("order")
     def priority = column[Int]("priority")
     def * = id.? ~ created_time ~ updated_time ~ title ~ description ~ status ~ order ~ priority <> (Project, Project.unapply _)
   }

@@ -30,11 +30,11 @@ class DAL(override val profile: ExtendedProfile)
     ddl.create
 
     // Insert test data
-    UsersFixture.createFixtures(this)
-    ProjectsFixture.createFixtures(this)
-    SprintsFixture.createFixtures(this)
-    StoriesFixture.createFixtures(this)
-    TasksFixture.createFixtures(this)
+    UsersFixture.createFixtures
+    ProjectsFixture.createFixtures
+    SprintsFixture.createFixtures
+    StoriesFixture.createFixtures
+    TasksFixture.createFixtures
   }
 
   /**

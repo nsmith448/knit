@@ -21,12 +21,12 @@ case class Sprint(
   lazy val stories = StoryRepo.findBySprint(this)
 }
 
-trait SprintComponent extends ResourceComponent {
+trait SprintComponent extends ResourceComponent with OrderedComponent {
   this: Profile =>
 
   import profile.simple._
 
-  object Sprints extends Resources[Sprint]("sprints") {
+  object Sprints extends Resources[Sprint]("sprints") with OrderedRows[Sprint] {
     def project_id = column[Long]("project_id")
     //def project_fk = foreignKey("project_fk", project_id, Projects)(_.id)
     def title = column[String]("title")
@@ -34,7 +34,6 @@ trait SprintComponent extends ResourceComponent {
     def begin_date = column[Date]("begin_date")
     def end_date = column[Date]("end_date")
     def status = column[Int]("status")
-    def order = column[Int]("order")
     def priority = column[Int]("priority")
     def * = id.? ~ created_time ~ updated_time ~ project_id ~ title ~ description ~ begin_date ~ end_date ~ status ~ order ~ priority <> (Sprint, Sprint.unapply _)
 

@@ -20,37 +20,13 @@ abstract class Resource {
 
 trait ResourceComponent {
   self: Profile =>
-
+    
   import profile.simple._
 
   abstract class Resources[T <: Resource](table: String) extends Table[T](table: String) {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def created_time = column[Timestamp]("created_time")
     def updated_time = column[Timestamp]("updated_time")
-
-    def all()(implicit session: Session): List[T] = {
-      Query(this).list
-    }
-
-    protected def byId(id: Long) = for {
-      q <- Query(this) if q.id === id
-    } yield q
-
-    // TODO
-    // this will be moved to Ordered
-    def inOrder(q: Query[this.type, T]) = q.sortBy(_.id.asc)
-
-    def findById(id: Long)(implicit session: Session): Option[T] = {
-      byId(id).firstOption
-    }
-
-    def deleteById(id: Long)(implicit session: Session): Boolean = {
-      byId(id).delete > 0
-    }
-
-    def insertRows(rows: T*)(implicit session: Session) = {
-      for (row <- rows) this.insert(row)
-    }
   }
 
 }

@@ -5,7 +5,7 @@ import slick.session.Session
 import java.sql.{ Date, Timestamp }
 
 object TasksFixture {
-  def createFixtures(dal: DAL) = {
+  def createFixtures = {
 
     val now = new java.util.Date()
     /*

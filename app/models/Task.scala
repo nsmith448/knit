@@ -22,18 +22,17 @@ case class Task(
   }
 }
 
-trait TaskComponent extends ResourceComponent {
+trait TaskComponent extends ResourceComponent with OrderedComponent {
   this: Profile =>
 
   import profile.simple._
 
-  object Tasks extends Resources[Task]("tasks") {
+  object Tasks extends Resources[Task]("tasks") with OrderedRows[Task] {
     def story_id = column[Long]("story_id")
     //def story_fk = foreignKey("story_fk", story_id, Stories)(_.id)
     def title = column[String]("title")
     def description = column[String]("description", O.DBType("VARCHAR(4096)"))
     def status = column[Int]("status")
-    def order = column[Int]("order")
     def priority = column[Int]("priority")
     def assignee_id = column[Long]("assignee_id")
     def time_total = column[Float]("time_total")

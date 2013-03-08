@@ -20,18 +20,17 @@ case class Story(
   lazy val tasks = TaskRepo.findByStory(this)
 }
 
-trait StoryComponent extends ResourceComponent {
+trait StoryComponent extends ResourceComponent with OrderedComponent {
   this: Profile =>
 
   import profile.simple._
 
-  object Stories extends Resources[Story]("stories") {
+  object Stories extends Resources[Story]("stories") with OrderedRows[Story] {
     def sprint_id = column[Long]("sprint_id")
     //def sprint_fk = foreignKey("sprint_fk", sprint_id, Sprints)(_.id)
     def title = column[String]("title")
     def description = column[String]("description", O.DBType("VARCHAR(4096)"))
     def status = column[Int]("status")
-    def order = column[Int]("order")
     def priority = column[Int]("priority")
     def points = column[Int]("points")
     def assignee_id = column[Option[Long]]("assignee_id")

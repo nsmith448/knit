@@ -1,24 +1,17 @@
 package repositories
-/*
-import models.{ User, Users }
-import scala.slick.driver.H2Driver.simple._
-import Database.threadLocalSession
-import play.api.db.DB
-import play.api.Play.current
 
-object UserRepo extends ResourceRepo[User](Users) {
-	
+import models.{ User, DAL }
+import models.AppDB._
+import play.api._
+import play.api.Play.current
+import slick.session.Session
+
+object UserRepo extends ResourceRepo(dal.Users) {
+  
   def findByEmail(email: String): Option[User] = {
     database withSession {
-      (for { 
-        u <- Users if u.email === email
-      } yield u) firstOption
+      implicit session: Session =>
+      dal.Users.findByEmail(email)
     }
   }
-  
-  def save(user: User): Boolean = {
-    database withSession {
-      byId(user.id.get).update(user) > 0
-    }
-  }
-}*/ 
+}
