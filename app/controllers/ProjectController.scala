@@ -5,17 +5,15 @@ import play.api.mvc._
 import models.AppDB._
 import slick.session.Session
 import repositories.ProjectRepo
+import service.JsonService
 
 object ProjectController extends Controller {
 
   def list = Action {
-    val projects = ProjectRepo.all
-    Ok(views.html.Projects.list(projects))
+    Ok(JsonService.projects())
   }
 
-  def view(id: Long) = Action {
-    val pr = (ProjectRepo findById id).get
-    Ok(views.html.Projects.view(pr))
+  def byId(id: Long) = Action {
+    Ok(JsonService.project(id))
   }
-
 }

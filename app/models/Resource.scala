@@ -14,13 +14,13 @@ abstract class Resource {
   }
 
   override def toString() = {
-    "[%d] " format id.getOrElse(-1L)
+    s"[${id.getOrElse(-1L)}] "
   }
 }
 
 trait ResourceComponent {
   self: Profile =>
-    
+
   import profile.simple._
 
   abstract class Resources[T <: Resource](table: String) extends Table[T](table: String) {

@@ -2,12 +2,21 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                           controllers.Application.index
-GET     /projects                   controllers.ProjectController.list
-GET     /projects/:id               controllers.ProjectController.view(id: Long)
-GET     /sprints                    controllers.SprintController.list
-GET     /stories/:id                controllers.StoryController.view(id: Long)
+GET     /json/projects              controllers.ProjectController.list
+GET     /json/projects/:id          controllers.ProjectController.byId(id: Long)
+GET     /json/projects/:id/sprints  controllers.SprintController.byProject(id: Long)
+GET     /json/sprints/:id           controllers.SprintController.byId(id: Long)
+GET     /json/sprints/:id/stories   controllers.StoryController.bySprint(id: Long)
+GET     /~jsroutes                  controllers.Application.javascriptRoutes
+
+GET     /templates/project.html     controllers.Application.projectTemplate
+
+# Map webjars sources
+GET     /webjars/*file              controllers.WebJarAssets.at(file)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+# Map page requests to the main page, at least for now
+GET     /                           controllers.Application.index
+GET     /projects/:id               controllers.Application.indexId(id: Long)

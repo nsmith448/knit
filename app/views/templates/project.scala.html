@@ -1,0 +1,30 @@
+<!-- Some worthless information about the project -->
+<h3>{{ project.data.title }}</h3>
+<div ng-bind-html="project.data.description"></div>
+
+<!-- A list of sprints -->
+<div class="row-fluid" ng-repeat="sprint in project.sprints | filter:sprintFilter" ng-controller="SprintCntl">
+  <table class="table">
+    <tr>
+      <td colspan="2" class="sprint-box-header">
+        <div class="row-fluid" style="padding-bottom: 0px">
+          <h3 class="span8" style="margin-top: 0px; margin-bottom: 0px">{{ sprint.data.title }}</h3>
+          <div class="span4">
+            <div class="btn-group pull-right">
+              <a class="btn btn-small">Info</a>
+              <button ng-click="loadStories()" class="btn btn-small">Load Stories</button>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr ng-repeat="story in sprint.stories">
+      <td style="width: 36px; padding: 4px 0; vertical-align: middle">
+        <a class="btn btn-mini btn-block" ng-bind="story.data.id"></a>
+      </td>
+      <td style="vertical-align: middle">
+        <strong ng-bind="story.data.title"></strong> &mdash; <span ng-bind="story.data.description"></span>
+      </td>
+    </tr>
+  </table>
+</div>

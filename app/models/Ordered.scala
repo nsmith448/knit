@@ -6,14 +6,14 @@ trait Ordered {
 
 abstract trait OrderedComponent {
   this: Profile =>
-	  
+
   import profile.simple._
-  
+
   abstract trait OrderedRows[T] {
     this: Table[T] =>
-	  
+
     def order = column[Int]("order")
-    
-	def inOrder(q: Query[OrderedRows[T], T]) = q.sortBy(_.order.asc) 
+
+    def inOrder(q: Query[OrderedRows[T], T]) = q.sortBy(_.order.asc)
   }
 }

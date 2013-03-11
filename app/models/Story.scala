@@ -2,6 +2,7 @@ package models
 
 import java.sql.Timestamp
 import slick.session.Session
+import AppDB._
 import repositories.TaskRepo
 
 case class Story(
@@ -17,7 +18,7 @@ case class Story(
   points: Int,
   assignee_id: Option[Long]) extends Resource with Ordered with Prioritized {
 
-  lazy val tasks = TaskRepo.findByStory(this)
+  lazy val tasks = TaskRepo findByStory id
 }
 
 trait StoryComponent extends ResourceComponent with OrderedComponent {
@@ -27,21 +28,15 @@ trait StoryComponent extends ResourceComponent with OrderedComponent {
 
   object Stories extends Resources[Story]("stories") with OrderedRows[Story] {
     def sprint_id = column[Long]("sprint_id")
-    //def sprint_fk = foreignKey("sprint_fk", sprint_id, Sprints)(_.id)
+    def sprint_fk = foreignKey("sprint_fk", sprint_id, dal.Sprints)(_.id)
     def title = column[String]("title")
     def description = column[String]("description", O.DBType("VARCHAR(4096)"))
     def status = column[Int]("status")
     def priority = column[Int]("priority")
     def points = column[Int]("points")
     def assignee_id = column[Option[Long]]("assignee_id")
-    //def assigneee_fk = foreignKey("assignee_fk", assignee_id, Users)(_.id.?)
+    def assigneee_fk = foreignKey("assignee_fk", assignee_id, dal.Users)(_.id.?)
     def * = id.? ~ created_time ~ updated_time ~ sprint_id ~ title ~ description ~ status ~ order ~ priority ~ points ~ assignee_id <> (Story, Story.unapply _)
-
-    def findBySprint(sprint: Sprint)(implicit session: Session) = {
-      (for {
-        st <- this if st.sprint_id === sprint.id
-      } yield st) list
-    }
   }
 }
 
@@ -49,6 +44,5 @@ object StoryStatus extends Enumeration {
   val NEW = Value(1)
   val IN_PROGRESS = Value(2)
   val RESOLVED = Value(3)
-  val NEEDS_REVIEW = Value(4)
-  val BLOCKED = Value(5)
+  val BLOCKED = Value(4)
 }

@@ -9,7 +9,7 @@ import java.sql.Timestamp
 import slick.session.Session
 import models.Priority
 
-object ProjectsFixture {
+object ProjectsFixture extends Fixture {
   def createFixtures = {
 
     ProjectRepo.createAll(

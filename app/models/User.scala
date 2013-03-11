@@ -37,9 +37,5 @@ trait UserComponent extends ResourceComponent {
     def salt = column[String]("salt")
     def status = column[Int]("status")
     def * = id.? ~ created_time ~ updated_time ~ active_time ~ name ~ email ~ password_hash ~ salt ~ status <> (User, User.unapply _)
-    
-    def findByEmail(email: String)(implicit session: Session) = (for {
-      u <- Query(this) if u.email === email
-    } yield u) firstOption
   }
 }

@@ -15,7 +15,8 @@ object Global extends GlobalSettings with SlickDriven {
     lazy val dal = getDal
     database.withSession {
       implicit session: Session =>
-        dal.drop
+        if (isSql)
+          dal.drop
         dal.create
     }
   }

@@ -1,9 +1,8 @@
 package models
 
 import java.sql.{ Date, Timestamp }
-import slick.driver.H2Driver._
-import slick.session.Session
 import repositories.StoryRepo
+import AppDB._
 
 case class Sprint(
   id: Option[Long],
@@ -17,8 +16,6 @@ case class Sprint(
   status: Int,
   order: Int,
   priority: Int) extends Resource with Ordered with Prioritized {
-
-  lazy val stories = StoryRepo.findBySprint(this)
 }
 
 trait SprintComponent extends ResourceComponent with OrderedComponent {
@@ -28,7 +25,7 @@ trait SprintComponent extends ResourceComponent with OrderedComponent {
 
   object Sprints extends Resources[Sprint]("sprints") with OrderedRows[Sprint] {
     def project_id = column[Long]("project_id")
-    //def project_fk = foreignKey("project_fk", project_id, Projects)(_.id)
+    def project_fk = foreignKey("project_fk", project_id, dal.Projects)(_.id)
     def title = column[String]("title")
     def description = column[String]("description", O.DBType("VARCHAR(4096)"))
     def begin_date = column[Date]("begin_date")
@@ -36,11 +33,5 @@ trait SprintComponent extends ResourceComponent with OrderedComponent {
     def status = column[Int]("status")
     def priority = column[Int]("priority")
     def * = id.? ~ created_time ~ updated_time ~ project_id ~ title ~ description ~ begin_date ~ end_date ~ status ~ order ~ priority <> (Sprint, Sprint.unapply _)
-
-    def findByProject(proj: Project)(implicit session: Session) = {
-      (for {
-        sp <- this if sp.project_id === proj.id
-      } yield sp) list
-    }
   }
 }

@@ -1,7 +1,7 @@
 package models
 
 import java.sql.{ Date, Timestamp }
-import slick.session.Session
+import AppDB._
 
 case class Task(
   id: Option[Long],
@@ -29,7 +29,7 @@ trait TaskComponent extends ResourceComponent with OrderedComponent {
 
   object Tasks extends Resources[Task]("tasks") with OrderedRows[Task] {
     def story_id = column[Long]("story_id")
-    //def story_fk = foreignKey("story_fk", story_id, Stories)(_.id)
+    def story_fk = foreignKey("story_fk", story_id, dal.Stories)(_.id)
     def title = column[String]("title")
     def description = column[String]("description", O.DBType("VARCHAR(4096)"))
     def status = column[Int]("status")
@@ -38,12 +38,6 @@ trait TaskComponent extends ResourceComponent with OrderedComponent {
     def time_total = column[Float]("time_total")
     def time_spent = column[Float]("time_spent")
     def * = id.? ~ created_time ~ updated_time ~ story_id ~ title ~ description ~ status ~ order ~ priority ~ assignee_id ~ time_total ~ time_spent <> (Task, Task.unapply _)
-
-    def findByStory(story: Story)(implicit session: Session) = {
-      (for {
-        tk <- this if tk.story_id === story.id
-      } yield tk) list
-    }
   }
 }
 
@@ -51,6 +45,5 @@ object TaskStatus extends Enumeration {
   val NEW = Value(1)
   val IN_PROGRESS = Value(2)
   val RESOLVED = Value(3)
-  val NEEDS_REVIEW = Value(4)
-  val BLOCKED = Value(5)
+  val BLOCKED = Value(4)
 }

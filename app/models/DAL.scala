@@ -21,6 +21,7 @@ class DAL(override val profile: ExtendedProfile)
   import profile.simple._
 
   private def ddl = { Projects.ddl ++ Users.ddl ++ Sprints.ddl ++ Stories.ddl ++ Tasks.ddl }
+  private def fixtures = Seq(UsersFixture, ProjectsFixture, SprintsFixture, StoriesFixture, TasksFixture)
 
   /**
    * Create the database schema
@@ -30,11 +31,7 @@ class DAL(override val profile: ExtendedProfile)
     ddl.create
 
     // Insert test data
-    UsersFixture.createFixtures
-    ProjectsFixture.createFixtures
-    SprintsFixture.createFixtures
-    StoriesFixture.createFixtures
-    TasksFixture.createFixtures
+    fixtures foreach (_.createFixtures)
   }
 
   /**

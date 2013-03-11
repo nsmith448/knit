@@ -15,17 +15,15 @@ case class Project(
   priority: Int) extends Resource with Ordered with Prioritized {
 
   override def toString() = {
-    super.toString + "'%s' '%s'" format (title, description)
+    super.toString + s"'$title' '$description'"
   }
-
-  lazy val sprints = SprintRepo.findByProject(this)
 }
 
 trait ProjectComponent extends ResourceComponent with OrderedComponent {
   self: Profile =>
-    
+
   import profile.simple._
-  
+
   object Projects extends Resources[Project]("projects") with OrderedRows[Project] {
     type T = Project
     def title = column[String]("title")

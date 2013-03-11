@@ -2,18 +2,16 @@ package controllers
 
 import play.api._
 import play.api.mvc._
-import models.{ Sprint, DAL }
+import models.Sprint
+import service.JsonService
 
 object SprintController extends Controller {
 
-  def list = Action {
-    /*
-    database withSession {
-      val pr = Query(Sprints) list
-
-      Ok(views.html.Sprints.list(pr.map(_.changed)))
-    }*/
-    Ok
+  def byId(id: Long) = Action {
+    Ok(JsonService.sprint(id))
   }
 
+  def byProject(id: Long) = Action {
+    Ok(JsonService.project_sprints(id))
+  }
 }

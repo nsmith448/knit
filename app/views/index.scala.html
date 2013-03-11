@@ -1,7 +1,9 @@
-@(message: String)
+@(json: String)
 
 @main("Welcome to Play 2.1") {
-    
-    <h3> @message </h3>
+  
+    <script type="text/javascript">
+    var __PRELOAD__ = @Html(json);
+    </script>
     
 }
